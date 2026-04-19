@@ -1,5 +1,12 @@
-import type { FormEvent } from "react";
+export type AuthView = "login" | "signup" | "verify-otp";
 
-export type AuthView = "login" | "signup";
+export type LoginFormValues = {
+  email: string;
+  password: string;
+};
 
-export type AuthSubmitHandler = (event: FormEvent<HTMLFormElement>) => void;
+export type SignupFormValues = {
+  name: string;
+  email: string;
+  password: string;
+};

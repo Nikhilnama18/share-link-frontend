@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { GoogleIcon } from "@/components/icons/google-icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,20 +10,24 @@ import {
 } from "@/components/ui/dialog";
 import { AuthDivider } from "@/components/auth/auth-divider";
 import { EmailField, PasswordField } from "@/components/auth/auth-fields";
-import type { AuthSubmitHandler } from "@/components/auth/auth-types";
+import type { LoginFormValues } from "@/components/auth/auth-types";
 import { emailPattern, useEmailError } from "@/components/auth/auth-validation";
 
 /** LoginForm collects email and password credentials for existing users. */
 export function LoginForm({
   email,
   onEmailChange,
+  error,
+  isSubmitting,
   onShowSignup,
   onSubmit,
 }: {
   email: string;
+  error?: string;
+  isSubmitting?: boolean;
   onEmailChange: (value: string) => void;
   onShowSignup: () => void;
-  onSubmit: AuthSubmitHandler;
+  onSubmit: (values: LoginFormValues) => void;
 }) {
   const [password, setPassword] = useState("");
   const [blurredEmail, setBlurredEmail] = useState("");
@@ -32,6 +36,11 @@ export function LoginForm({
   const shouldShowEmailError = blurredEmail === email;
   const emailError = useEmailError(email, shouldShowEmailError);
   const isEmailLoginDisabled = !emailPattern.test(email) || !password;
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSubmit({ email, password });
+  };
 
   return (
     <>
@@ -44,7 +53,7 @@ export function LoginForm({
         </DialogDescription>
       </DialogHeader>
 
-      <form className="mt-2 grid gap-4" onSubmit={onSubmit}>
+      <form className="mt-2 grid gap-4" onSubmit={handleSubmit}>
         <EmailField
           id="login-email"
           value={email}
@@ -71,11 +80,12 @@ export function LoginForm({
 
         <Button
           type="submit"
-          disabled={isEmailLoginDisabled}
+          disabled={isEmailLoginDisabled || isSubmitting}
           className="h-11 rounded-full bg-[#185f35] text-white hover:bg-[#144f2c]"
         >
-          Login in with email
+          {isSubmitting ? "Logging in..." : "Log in with email"}
         </Button>
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
       </form>
 
       <AuthDivider />

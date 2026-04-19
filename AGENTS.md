@@ -39,6 +39,7 @@ For now, the frontend contains only the app shell:
 - `components/icons/google-icon.tsx`: Reusable Google brand mark.
 - `components/layout/site-header.tsx`: Global header shell.
 - `components/providers/app-providers.tsx`: Client-side providers for `next-themes` and Chakra UI.
+- `components/providers/auth-provider.tsx`: Client-side auth session provider. Stores user profile state while the backend owns the HTTP-only cookie.
 - `components/ui/button.tsx`: Official shadcn registry Button component.
 - `components/ui/dialog.tsx`: Official shadcn registry Dialog component.
 - `components/ui/input.tsx`: Official shadcn registry Input component.
@@ -47,6 +48,9 @@ For now, the frontend contains only the app shell:
 - `components/ui/switch.tsx`: Official shadcn registry Switch component.
 - `components/ui/theme-toggle.tsx`: Dark/light mode toggle composed with the shadcn Switch.
 - `components/ui/theme-toggle-client.tsx`: No-SSR wrapper that prevents persisted theme state from causing hydration mismatches.
+- `lib/api/client.ts`: Shared API request wrapper. Use this for credentials, JSON parsing, and backend error handling.
+- `lib/api/auth.ts`: Auth endpoint functions. Add future domain endpoint groups as sibling files, such as `lib/api/rules.ts`.
+- `lib/api/types.ts`: Shared API response and request types.
 - `lib/utils.ts`: Shared utility helpers such as `cn`.
 - `.github/pull_request_template.md`: Pull request template.
 - `components.json`: shadcn CLI configuration.
@@ -59,6 +63,8 @@ For now, the frontend contains only the app shell:
 - Put reusable UI primitives in `components/ui`.
 - Put app-wide providers in `components/providers`.
 - Put shared non-React helpers in `lib`.
+- Put backend API calls in domain files under `lib/api`.
+- Keep API files free of React state; components and providers should call API functions instead.
 - Use `app/page.tsx` only for route composition.
 - Do not reintroduce the old Shards UI or Bootstrap setup.
 - Do not hand-roll reusable UI primitives when an official shadcn component exists.
