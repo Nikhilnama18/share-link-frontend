@@ -86,10 +86,11 @@ function LoginForm({
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }) {
   const [password, setPassword] = useState("");
-  const [hasTouchedEmail, setHasTouchedEmail] = useState(false);
+  const [blurredEmail, setBlurredEmail] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const emailError = useEmailError(email, hasTouchedEmail);
+  const shouldShowEmailError = blurredEmail === email;
+  const emailError = useEmailError(email, shouldShowEmailError);
   const isEmailLoginDisabled = !emailPattern.test(email) || !password;
 
   return (
@@ -108,8 +109,8 @@ function LoginForm({
           id="login-email"
           value={email}
           error={emailError}
-          hasTouched={hasTouchedEmail}
-          onBlur={() => setHasTouchedEmail(true)}
+          shouldShowError={shouldShowEmailError}
+          onBlur={() => setBlurredEmail(email)}
           onChange={onEmailChange}
         />
 
@@ -176,11 +177,12 @@ function SignupForm({
 }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [hasTouchedEmail, setHasTouchedEmail] = useState(false);
+  const [blurredEmail, setBlurredEmail] = useState("");
   const [hasTouchedPassword, setHasTouchedPassword] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const emailError = useEmailError(email, hasTouchedEmail);
+  const shouldShowEmailError = blurredEmail === email;
+  const emailError = useEmailError(email, shouldShowEmailError);
   const passwordError = useSignupPasswordError(password, hasTouchedPassword);
   const hasValidPassword = getSignupPasswordError(password) === "";
   const isSignupDisabled = !name.trim() || !emailPattern.test(email) || !hasValidPassword;
@@ -219,8 +221,8 @@ function SignupForm({
           id="signup-email"
           value={email}
           error={emailError}
-          hasTouched={hasTouchedEmail}
-          onBlur={() => setHasTouchedEmail(true)}
+          shouldShowError={shouldShowEmailError}
+          onBlur={() => setBlurredEmail(email)}
           onChange={onEmailChange}
         />
 
@@ -264,17 +266,17 @@ function SignupForm({
 /** EmailField renders an email input and delayed validation message. */
 function EmailField({
   error,
-  hasTouched,
   id,
   onBlur,
   onChange,
+  shouldShowError,
   value,
 }: {
   error: string;
-  hasTouched: boolean;
   id: string;
   onBlur: () => void;
   onChange: (value: string) => void;
+  shouldShowError: boolean;
   value: string;
 }) {
   return (
@@ -290,7 +292,7 @@ function EmailField({
         onBlur={onBlur}
         onChange={(event) => onChange(event.target.value)}
       />
-      {hasTouched && error ? (
+      {shouldShowError && error ? (
         <p id={`${id}-error`} className="text-sm text-destructive">
           {error}
         </p>
@@ -364,14 +366,14 @@ function AuthDivider() {
 }
 
 /** useEmailError returns a delayed validation error for email fields. */
-function useEmailError(email: string, hasTouchedEmail: boolean) {
+function useEmailError(email: string, shouldShowEmailError: boolean) {
   return useMemo(() => {
-    if (!hasTouchedEmail || !email || emailPattern.test(email)) {
+    if (!shouldShowEmailError || !email || emailPattern.test(email)) {
       return "";
     }
 
     return "Enter a valid email address.";
-  }, [email, hasTouchedEmail]);
+  }, [email, shouldShowEmailError]);
 }
 
 /** useSignupPasswordError returns a delayed validation error for signup passwords. */
