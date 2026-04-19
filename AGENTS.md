@@ -29,10 +29,16 @@ For now, the frontend contains only the app shell:
 - `app/page.tsx`: Homepage. Keep it small; compose sections/components here instead of placing large UI directly inside the page.
 - `app/not-found.tsx`: Minimal fallback for unmatched routes.
 - `app/globals.css`: Tailwind layers and global CSS theme tokens.
+- `components/auth/auth-modal.tsx`: Header auth dialog shell and login/signup view switcher.
+- `components/auth/login-form.tsx`: Login-specific form UI and state.
+- `components/auth/signup-form.tsx`: Signup-specific form UI and state.
+- `components/auth/auth-fields.tsx`: Shared email and password field components.
+- `components/auth/auth-divider.tsx`: Shared divider between email and social auth.
+- `components/auth/auth-validation.ts`: Shared email and password validation helpers.
+- `components/auth/auth-types.ts`: Shared auth TypeScript types.
 - `components/icons/google-icon.tsx`: Reusable Google brand mark.
-- `components/providers/app-providers.tsx`: Client-side providers for `next-themes` and Chakra UI.
-- `components/auth/auth-modal.tsx`: Header auth modal for email and Google login entry.
 - `components/layout/site-header.tsx`: Global header shell.
+- `components/providers/app-providers.tsx`: Client-side providers for `next-themes` and Chakra UI.
 - `components/ui/button.tsx`: Official shadcn registry Button component.
 - `components/ui/dialog.tsx`: Official shadcn registry Dialog component.
 - `components/ui/input.tsx`: Official shadcn registry Input component.
