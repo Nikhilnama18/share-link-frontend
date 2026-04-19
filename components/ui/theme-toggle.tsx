@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { Switch } from "@/components/ui/switch";
 
 /** ThemeToggle switches the app between the default dark theme and light theme. */
 export function ThemeToggle() {
@@ -9,21 +10,28 @@ export function ThemeToggle() {
   const isDark = currentTheme === "dark";
 
   return (
-    <button
-      type="button"
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-      aria-pressed={isDark}
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative inline-flex h-9 w-16 items-center rounded-full border bg-muted p-1 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-    >
+    <div className="relative h-9 w-16">
+      <Switch
+        aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+        checked={isDark}
+        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+        className="h-9 w-16 opacity-0"
+      />
       <span
-        className={`grid h-7 w-7 place-items-center rounded-full bg-background text-foreground shadow-sm transition-transform ${
+        aria-hidden="true"
+        className={`pointer-events-none absolute left-1 top-1 grid h-7 w-7 place-items-center rounded-full bg-background text-foreground shadow-sm ring-1 ring-border transition-transform ${
           isDark ? "translate-x-7" : "translate-x-0"
         }`}
       >
         {isDark ? <MoonIcon /> : <SunIcon />}
       </span>
-    </button>
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 -z-10 rounded-full border transition-colors ${
+          isDark ? "bg-primary" : "bg-input"
+        }`}
+      />
+    </div>
   );
 }
 

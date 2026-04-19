@@ -20,7 +20,7 @@ For now, the frontend contains only the app shell:
 - React
 - Tailwind CSS for styling and design tokens
 - Chakra UI for future accessible UI primitives where useful
-- shadcn-style local components for app-specific primitives
+- Official shadcn registry components for shared UI primitives
 - `next-themes` for light/dark mode
 
 ## Current File Structure
@@ -29,12 +29,21 @@ For now, the frontend contains only the app shell:
 - `app/page.tsx`: Homepage. Keep it small; compose sections/components here instead of placing large UI directly inside the page.
 - `app/not-found.tsx`: Minimal fallback for unmatched routes.
 - `app/globals.css`: Tailwind layers and global CSS theme tokens.
+- `components/icons/google-icon.tsx`: Reusable Google brand mark.
 - `components/providers/app-providers.tsx`: Client-side providers for `next-themes` and Chakra UI.
+- `components/auth/auth-modal.tsx`: Header auth modal for email and Google login entry.
 - `components/layout/site-header.tsx`: Global header shell.
-- `components/ui/button.tsx`: Local shadcn-style button primitive.
-- `components/ui/theme-toggle.tsx`: Dark/light mode toggle.
+- `components/ui/button.tsx`: Official shadcn registry Button component.
+- `components/ui/dialog.tsx`: Official shadcn registry Dialog component.
+- `components/ui/input.tsx`: Official shadcn registry Input component.
+- `components/ui/label.tsx`: Official shadcn registry Label component.
+- `components/ui/separator.tsx`: Official shadcn registry Separator component.
+- `components/ui/switch.tsx`: Official shadcn registry Switch component.
+- `components/ui/theme-toggle.tsx`: Dark/light mode toggle composed with the shadcn Switch.
+- `components/ui/theme-toggle-client.tsx`: No-SSR wrapper that prevents persisted theme state from causing hydration mismatches.
 - `lib/utils.ts`: Shared utility helpers such as `cn`.
 - `.github/pull_request_template.md`: Pull request template.
+- `components.json`: shadcn CLI configuration.
 
 ## Architecture Rules
 
@@ -46,11 +55,13 @@ For now, the frontend contains only the app shell:
 - Put shared non-React helpers in `lib`.
 - Use `app/page.tsx` only for route composition.
 - Do not reintroduce the old Shards UI or Bootstrap setup.
+- Do not hand-roll reusable UI primitives when an official shadcn component exists.
 - Avoid adding new dependencies unless they clearly reduce complexity or match the chosen stack.
 
 ## Styling Rules
 
 - Use Tailwind classes for most styling.
+- Use official shadcn registry components via `npx shadcn@latest add <component>` for shared UI primitives.
 - Use CSS variables in `app/globals.css` for theme tokens.
 - Support both dark and light mode.
 - Dark mode is the default.

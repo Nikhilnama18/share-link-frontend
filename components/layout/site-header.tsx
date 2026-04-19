@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { AuthModal } from "@/components/auth/auth-modal";
+import { ThemeToggleClient } from "@/components/ui/theme-toggle-client";
 
 /** SiteHeader renders the global brand bar used across the app shell. */
 export function SiteHeader() {
@@ -11,10 +11,8 @@ export function SiteHeader() {
           Share the link
         </Link>
         <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <Button type="button" variant="outline" size="sm">
-            Login / Signup
-          </Button>
+          <ThemeToggleClient />
+          <AuthModal />
         </div>
       </div>
     </header>
