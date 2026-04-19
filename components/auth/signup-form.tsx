@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { GoogleIcon } from "@/components/icons/google-icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthDivider } from "@/components/auth/auth-divider";
 import { EmailField, PasswordField } from "@/components/auth/auth-fields";
-import type { AuthSubmitHandler } from "@/components/auth/auth-types";
+import type { SignupFormValues } from "@/components/auth/auth-types";
 import {
   emailPattern,
   getSignupPasswordError,
@@ -23,14 +23,18 @@ import {
 /** SignupForm collects the basic account details needed to create a user. */
 export function SignupForm({
   email,
+  error,
+  isSubmitting,
   onEmailChange,
   onShowLogin,
   onSubmit,
 }: {
   email: string;
+  error?: string;
+  isSubmitting?: boolean;
   onEmailChange: (value: string) => void;
   onShowLogin: () => void;
-  onSubmit: AuthSubmitHandler;
+  onSubmit: (values: SignupFormValues) => void;
 }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +47,11 @@ export function SignupForm({
   const passwordError = useSignupPasswordError(password, hasTouchedPassword);
   const hasValidPassword = getSignupPasswordError(password) === "";
   const isSignupDisabled = !name.trim() || !emailPattern.test(email) || !hasValidPassword;
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSubmit({ name: name.trim(), email, password });
+  };
 
   return (
     <>
@@ -62,7 +71,7 @@ export function SignupForm({
 
       <AuthDivider />
 
-      <form className="grid gap-4" onSubmit={onSubmit}>
+      <form className="grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-2">
           <Label htmlFor="signup-name">Name</Label>
           <Input
@@ -95,11 +104,12 @@ export function SignupForm({
 
         <Button
           type="submit"
-          disabled={isSignupDisabled}
+          disabled={isSignupDisabled || isSubmitting}
           className="h-11 rounded-full bg-[#185f35] text-white hover:bg-[#144f2c]"
         >
-          Continue with email
+          {isSubmitting ? "Creating account..." : "Continue with email"}
         </Button>
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
       </form>
 
       <p className="text-center text-sm text-muted-foreground">
